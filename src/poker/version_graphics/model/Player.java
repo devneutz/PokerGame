@@ -2,21 +2,26 @@ package poker.version_graphics.model;
 
 import java.util.ArrayList;
 
+import javafx.beans.property.SimpleStringProperty;
+
 public class Player implements Comparable<Player> {
     public static final int HAND_SIZE = 5;
-    
-    private final String playerName; // This is the ID
+    private final SimpleStringProperty playerName = new SimpleStringProperty(); // This is the ID
     private final ArrayList<Card> cards = new ArrayList<>();
     private HandType handType;
     
     public Player(String playerName) {
-        this.playerName = playerName;
+        this.playerName.set(playerName);
     }
 
     public String getPlayerName() {
-        return playerName;
+        return playerName.getValue();
     }
-
+    
+    public SimpleStringProperty getPlayerNameProperty() {
+    	return playerName;
+    }
+    
     public ArrayList<Card> getCards() {
         return cards;
     }

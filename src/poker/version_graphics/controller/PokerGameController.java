@@ -38,6 +38,19 @@ public class PokerGameController {
     	model.getDeck().shuffle();
     }
     
+    private void evaluateWinner() {
+    	Player winner = model.getPlayer(0);
+    	
+    	for(int i = 0; i < PokerGame.NUM_PLAYERS; i++) {
+    		if(model.getPlayer(i).compareTo(winner) > 0) {
+    			winner = model.getPlayer(i);
+    		}
+    	}
+    	view.setWinnerLabel(winner);
+    	//Alert winnerAlert = new Alert(AlertType.INFORMATION, "Winner is: " + winner.getPlayerName());
+    	//winnerAlert.showAndWait();
+    }
+    
     /**
      * Deal each player five cards, then evaluate the two hands
      */
@@ -56,6 +69,7 @@ public class PokerGameController {
         		PlayerPane pp = view.getPlayerPane(i);
         		pp.updatePlayerDisplay();
         	}
+    		evaluateWinner();
     	} else {
             Alert alert = new Alert(AlertType.ERROR, "Not enough cards - shuffle first");
             alert.showAndWait();

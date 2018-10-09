@@ -8,6 +8,7 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import poker.version_graphics.PokerGame;
+import poker.version_graphics.model.Player;
 import poker.version_graphics.model.PokerGameModel;
 
 public class PokerGameView {
@@ -50,6 +51,10 @@ public class PokerGameView {
 	
 	public PlayerPane getPlayerPane(int i) {
 		return (PlayerPane) players.getChildren().get(i);
+	}
+	
+	public void setWinnerLabel(Player winner) {
+		controls.linkWinner(winner);
 	}
 	
 	public Button getShuffleButton() {
