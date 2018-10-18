@@ -1,14 +1,22 @@
 package poker.version_graphics.view;
 
+import javafx.geometry.Insets;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import poker.version_graphics.model.Card;
 import poker.version_graphics.model.HandType;
 import poker.version_graphics.model.Player;
 
 public class PlayerPane extends VBox {
+	private HBox nameBox = new HBox();
     private Label lblName = new Label();
+    private Button btnRename = new Button("rename");
     private HBox hboxCards = new HBox();
     private Label lblEvaluation = new Label("--");
     
@@ -19,8 +27,10 @@ public class PlayerPane extends VBox {
         super(); // Always call super-constructor first !!
         this.getStyleClass().add("player"); // CSS style class
         
+        this.nameBox.getChildren().addAll(lblName, btnRename);
+        
         // Add child nodes
-        this.getChildren().addAll(lblName, hboxCards, lblEvaluation);
+        this.getChildren().addAll(nameBox, hboxCards, lblEvaluation);
         
         // Add CardLabels for the cards
         for (int i = 0; i < 5; i++) {
@@ -31,6 +41,13 @@ public class PlayerPane extends VBox {
     
     public void setPlayer(Player player) {
     	this.player = player;
+    	player.getIsWinnerProperty().addListener((obs, oldValue, newValue) ->{
+    		if(newValue) {
+    			this.setBackground(new Background(new BackgroundFill(Color.LIGHTGREEN, CornerRadii.EMPTY, Insets.EMPTY)));
+    		}else {
+    			this.setBackground(Background.EMPTY);
+    		}
+    	});
     	updatePlayerDisplay(); // Immediately display the player information
     }
     
@@ -47,5 +64,13 @@ public class PlayerPane extends VBox {
     		else
     			lblEvaluation.setText("--");
     	}
+    }
+    
+    public Button getRenameButton() {
+    	return this.btnRename;
+    }
+    
+    public void renamePlayer(String inName) {
+    	player.setPlayerName(inName);
     }
 }

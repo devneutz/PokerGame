@@ -2,6 +2,7 @@ package poker.version_graphics.controller;
 
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.input.KeyCombination;
 import poker.version_graphics.PokerGame;
 import poker.version_graphics.model.Card;
 import poker.version_graphics.model.DeckOfCards;
@@ -20,6 +21,24 @@ public class PokerGameController {
 		
 		view.getShuffleButton().setOnAction( e -> shuffle() );
 		view.getDealButton().setOnAction( e -> deal() );
+		
+		view.getAddPlayerItem().setAccelerator(KeyCombination.keyCombination("CTRL+A"));
+		view.getAddPlayerItem().setOnAction(e -> {
+			try{
+				model.addPlayer(1);
+				view.drawPlayerPanes();
+			}catch(IllegalArgumentException inEx) {
+				Alert alert = new Alert(AlertType.ERROR, inEx.getMessage());
+				alert.showAndWait();
+			}
+		});
+		
+		// ?????
+		for(int i = 0; i < model.getNumberOfPlayers(); i++) {
+			view.getPlayerPane(i).getRenameButton().setOnAction(e ->{
+				
+			});
+		}
 	}
 	
 
@@ -28,8 +47,9 @@ public class PokerGameController {
      * Remove all cards from players hands, and shuffle the deck
      */
     private void shuffle() {
-    	for (int i = 0; i < PokerGame.NUM_PLAYERS; i++) {
+    	for (int i = 0; i < model.getNumberOfPlayers(); i++) {
     		Player p = model.getPlayer(i);
+    		p.setIsWinner(false);
     		p.discardHand();
     		PlayerPane pp = view.getPlayerPane(i);
     		pp.updatePlayerDisplay();
@@ -41,24 +61,24 @@ public class PokerGameController {
     private void evaluateWinner() {
     	Player winner = model.getPlayer(0);
     	
-    	for(int i = 0; i < PokerGame.NUM_PLAYERS; i++) {
-    		if(model.getPlayer(i).compareTo(winner) > 0) {
-    			winner = model.getPlayer(i);
+    	for(int i = 0; i < model.getNumberOfPlayers(); i++) {
+    		Player playerCompareTo = model.getPlayer(i);
+    		playerCompareTo.setIsWinner(false);
+    		if(playerCompareTo.compareTo(winner) > 0) {
+    			winner = playerCompareTo;
     		}
     	}
-    	view.setWinnerLabel(winner);
-    	//Alert winnerAlert = new Alert(AlertType.INFORMATION, "Winner is: " + winner.getPlayerName());
-    	//winnerAlert.showAndWait();
+    	winner.setIsWinner(true);	
     }
     
     /**
      * Deal each player five cards, then evaluate the two hands
      */
     private void deal() {
-    	int cardsRequired = PokerGame.NUM_PLAYERS * Player.HAND_SIZE;
+    	int cardsRequired = model.getNumberOfPlayers() * Player.HAND_SIZE;
     	DeckOfCards deck = model.getDeck();
     	if (cardsRequired <= deck.getCardsRemaining()) {
-        	for (int i = 0; i < PokerGame.NUM_PLAYERS; i++) {
+        	for (int i = 0; i < model.getNumberOfPlayers(); i++) {
         		Player p = model.getPlayer(i);
         		p.discardHand();
         		for (int j = 0; j < Player.HAND_SIZE; j++) {

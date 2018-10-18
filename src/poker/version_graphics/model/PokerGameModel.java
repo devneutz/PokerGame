@@ -7,9 +7,12 @@ import poker.version_graphics.PokerGame;
 public class PokerGameModel {
 	private final ArrayList<Player> players = new ArrayList<>();
 	private DeckOfCards deck;
+	private int NumberOfPlayers;
 	
-	public PokerGameModel() {
-		for (int i = 0; i < PokerGame.NUM_PLAYERS; i++) {
+	public PokerGameModel(int inNumberOfPlayers) {
+		this.NumberOfPlayers = inNumberOfPlayers;
+		
+		for (int i = 0; i < NumberOfPlayers; i++) {
 			players.add(new Player("Player " + i));
 		}
 		
@@ -22,5 +25,21 @@ public class PokerGameModel {
 	
 	public DeckOfCards getDeck() {
 		return deck;
+	}
+	
+	public void addPlayer(int inPlayerToAdd) throws IllegalArgumentException
+	{
+		if(this.NumberOfPlayers + inPlayerToAdd <= 10) {
+			this.NumberOfPlayers += inPlayerToAdd;
+			for(int i = 0; i < inPlayerToAdd; i++) {
+				players.add(new Player("Player " + players.size()));
+			}
+			return;
+		}
+		throw new IllegalArgumentException("Sorry, you tried to start a game with " + (this.NumberOfPlayers + inPlayerToAdd) + " Players. This is not possible.");
+	}
+	
+	public int getNumberOfPlayers() {
+		return this.NumberOfPlayers;
 	}
 }
