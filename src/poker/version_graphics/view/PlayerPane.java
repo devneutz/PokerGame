@@ -75,6 +75,10 @@ public class PlayerPane extends VBox {
     	}
     }
     
+    public Button getRemoveButton() {
+    	return this.btnRemove;
+    }
+    
     public Button getRenameButton() {
     	return this.btnRename;
     }

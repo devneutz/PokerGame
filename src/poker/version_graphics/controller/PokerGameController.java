@@ -44,6 +44,7 @@ public class PokerGameController {
 				    model.addPlayer(tmpAmount);
 
 					view.resetGame();
+					updateBindingAndEvents();
 				});
 			}catch(NumberFormatException inE){
 				Alert alert = new Alert(AlertType.ERROR, "Input not a number");
@@ -54,14 +55,40 @@ public class PokerGameController {
 			}
 		});
 		
-		// ?????
+		updateBindingAndEvents();
+		
+	}
+	
+	private void updateBindingAndEvents() {
 		for(int i = 0; i < model.getNumberOfPlayers(); i++) {
-			view.getPlayerPane(i).getRenameButton().setOnAction(e ->{
-				
-			});		
+			int tmpPlayerIndex = i;
+			view.getPlayerPane(i).getRemoveButton().setOnAction(e ->{
+				removePlayer(tmpPlayerIndex);
+				view.resetGame();
+				updateBindingAndEvents();
+			});
+			view.getPlayerPane(i).getRenameButton().setOnAction(e -> {
+				TextInputDialog dialog = new TextInputDialog(model.getPlayer(tmpPlayerIndex).getPlayerName());
+				dialog.setTitle("Renaming player");
+				dialog.setHeaderText("Enter the new name.");
+				dialog.setContentText("Name:");
+				 
+				Optional<String> result = dialog.showAndWait();
+				 
+				result.ifPresent(name -> {
+				   Player x = model.getPlayer(tmpPlayerIndex);
+				   x.setPlayerName(name);
+				   view.getPlayerPane(tmpPlayerIndex).updatePlayerDisplay();
+				   updateBindingAndEvents();
+				});
+			});
 		}
 	}
 	
+	private void removePlayer(int inIndex) {
+		model.removePlayer(inIndex);
+		view.resetGame();
+	}
 
 
     /**

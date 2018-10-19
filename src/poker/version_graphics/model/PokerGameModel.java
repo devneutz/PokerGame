@@ -27,12 +27,19 @@ public class PokerGameModel {
 		return deck;
 	}
 	
+	public void removePlayer(int inPlayerIndex) {
+		if(players.size()- 1 >= inPlayerIndex) {
+			players.remove(inPlayerIndex);
+			this.NumberOfPlayers -= 1;
+		}		
+	}
+	
 	public void addPlayer(int inPlayerToAdd) throws IllegalArgumentException
 	{
 		if(this.NumberOfPlayers + inPlayerToAdd <= 10) {
 			this.NumberOfPlayers += inPlayerToAdd;
 			for(int i = 0; i < inPlayerToAdd; i++) {
-				players.add(new Player("Player " + players.size()));
+				players.add(new Player("Player"));
 			}
 			return;
 		}
