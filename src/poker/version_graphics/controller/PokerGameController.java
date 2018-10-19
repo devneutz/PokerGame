@@ -1,7 +1,14 @@
 package poker.version_graphics.controller;
 
+import java.util.Optional;
+
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.TextInputDialog;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 import poker.version_graphics.PokerGame;
 import poker.version_graphics.model.Card;
@@ -22,11 +29,25 @@ public class PokerGameController {
 		view.getShuffleButton().setOnAction( e -> shuffle() );
 		view.getDealButton().setOnAction( e -> deal() );
 		
-		view.getAddPlayerItem().setAccelerator(KeyCombination.keyCombination("CTRL+A"));
+		
 		view.getAddPlayerItem().setOnAction(e -> {
 			try{
-				model.addPlayer(1);
-				view.drawPlayerPanes();
+				TextInputDialog dialog = new TextInputDialog("1");
+				dialog.setTitle("Add players");
+				dialog.setHeaderText("Enter the amount of player to be added");
+				dialog.setContentText("Players:");
+				 
+				Optional<String> result = dialog.showAndWait();
+				 
+				result.ifPresent(number -> {
+				    int tmpAmount = Integer.parseInt(number);
+				    model.addPlayer(tmpAmount);
+
+					view.resetGame();
+				});
+			}catch(NumberFormatException inE){
+				Alert alert = new Alert(AlertType.ERROR, "Input not a number");
+				alert.showAndWait();
 			}catch(IllegalArgumentException inEx) {
 				Alert alert = new Alert(AlertType.ERROR, inEx.getMessage());
 				alert.showAndWait();
@@ -37,7 +58,7 @@ public class PokerGameController {
 		for(int i = 0; i < model.getNumberOfPlayers(); i++) {
 			view.getPlayerPane(i).getRenameButton().setOnAction(e ->{
 				
-			});
+			});		
 		}
 	}
 	

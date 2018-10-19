@@ -15,7 +15,7 @@ public class ControlArea extends HBox{
 
     public ControlArea() {
     	super(); // Always call super-constructor first !!
-    	
+    	this.setMinHeight(80);
     	this.getChildren().addAll(lblDeck, spacer, btnShuffle, btnDeal);
 
         HBox.setHgrow(spacer, Priority.ALWAYS); // Use region to absorb resizing

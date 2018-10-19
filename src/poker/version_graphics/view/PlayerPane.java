@@ -1,12 +1,15 @@
 package poker.version_graphics.view;
 
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import poker.version_graphics.model.Card;
@@ -17,6 +20,7 @@ public class PlayerPane extends VBox {
 	private HBox nameBox = new HBox();
     private Label lblName = new Label();
     private Button btnRename = new Button("rename");
+    private Button btnRemove = new Button("X");
     private HBox hboxCards = new HBox();
     private Label lblEvaluation = new Label("--");
     
@@ -27,7 +31,12 @@ public class PlayerPane extends VBox {
         super(); // Always call super-constructor first !!
         this.getStyleClass().add("player"); // CSS style class
         
-        this.nameBox.getChildren().addAll(lblName, btnRename);
+        btnRename.setMaxWidth(80);
+        btnRemove.setMaxWidth(20);
+        btnRemove.setAlignment(Pos.CENTER_RIGHT);
+        Region filler = new Region();
+        nameBox.setHgrow(filler, Priority.ALWAYS);
+        this.nameBox.getChildren().addAll(lblName, btnRename,filler,  btnRemove);
         
         // Add child nodes
         this.getChildren().addAll(nameBox, hboxCards, lblEvaluation);
@@ -68,9 +77,5 @@ public class PlayerPane extends VBox {
     
     public Button getRenameButton() {
     	return this.btnRename;
-    }
-    
-    public void renamePlayer(String inName) {
-    	player.setPlayerName(inName);
     }
 }
