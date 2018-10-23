@@ -16,11 +16,11 @@ public enum HandType {
         if (isOnePair(cards)) currentEval = OnePair;
         if (isTwoPair(cards)) currentEval = TwoPair;
         if (isThreeOfAKind(cards)) currentEval = ThreeOfAKind;
-        //if (isStraight(cards)) currentEval = Straight;
+        if (isStraight(cards)) currentEval = Straight;
         if (isFlush(cards)) currentEval = Flush;
         if (isFullHouse(cards)) currentEval = FullHouse;
         if (isFourOfAKind(cards)) currentEval = FourOfAKind;
-        //if (isStraightFlush(cards)) currentEval = StraightFlush;
+        if (isStraightFlush(cards)) currentEval = StraightFlush;
         
         return currentEval;
     }
@@ -68,47 +68,28 @@ public enum HandType {
     }
     
     private static boolean isStraight(ArrayList<Card> cards) {
-     ArrayList<Card> clonedCards = (ArrayList<Card>) cards.clone();
-   	 boolean found = false;
-   
-       for(int i=0; i<clonedCards.size(); i++){
-   		int min = i;
-   		
-   		for(int j=i+1; j<clonedCards.size(); i++) {
-   			
-   			if(clonedCards.get(j).getRank().ordinal() < clonedCards.get(min).getRank().ordinal()) {
-   				min = j;
-   			}
-   			
-   			Collections.swap(clonedCards, min, j);
-   		}
-   		
-   	}
-    
-       int foundstraightmin = 0,foundstraightmax = 0,foundstraight = 0;
-       
-       if(clonedCards.get(4).getRank().ordinal() == 12) {
-       	for(int x=0; x<clonedCards.size()-1;x++) {
-       		if(clonedCards.get(x).getRank().ordinal() == x) foundstraightmin++;
-       		
-       	}
-       	if(foundstraightmin == 4) found = true;
-       	
-       	for(int z=8; z<clonedCards.get(4).getRank().ordinal();z++) {
-       		if(clonedCards.get(z).getRank().ordinal() == z) foundstraightmax++;
-       		
-       	}
-       	if(foundstraightmax == 4) found = true;
-       }
-       
-       for(int y=0; y<12;y++) {
-   		if(clonedCards.get(y).getRank().ordinal() == y) foundstraight++;
-   		
-   	}
-       if(foundstraight == 4) found = true;
-            
-   	        
-       return found;        
+    	boolean tmpStraightFound = false;
+    	boolean[] tmpValueFound = new boolean[13];
+    	for(Card c : cards) {
+    		if(c.getRank().ordinal() == 12) {
+    			tmpValueFound[1] = true;
+    		}
+    		tmpValueFound[c.getRank().ordinal()] = true;
+    	}
+    	int tmpSuccessiveCards = 0;
+    	for(boolean bv : tmpValueFound) {
+    		if(bv) {
+    			tmpSuccessiveCards++;
+    		}else {
+    			tmpSuccessiveCards = 0;
+    		}
+    		
+    		if(tmpSuccessiveCards == 5) {
+    			tmpStraightFound = true;
+    			break;
+    		}
+    	}
+    	return tmpStraightFound;    	
     }
     
     private static boolean isFlush(ArrayList<Card> cards) {
