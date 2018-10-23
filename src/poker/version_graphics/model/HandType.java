@@ -178,4 +178,4 @@ public enum HandType {
     	
         return found;        
     }
-}
+}//Test
