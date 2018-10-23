@@ -1,8 +1,5 @@
 package poker.version_graphics.model;
 
-import java.util.ArrayList;
-import java.util.Collections;
-
 public class Card {
     public enum Suit { Clubs, Diamonds, Hearts, Spades;
         @Override
@@ -53,7 +50,6 @@ public class Card {
         return rank;
     }
     
-     
     @Override
     public String toString() {
         return rank.toString() + suit.toString();
