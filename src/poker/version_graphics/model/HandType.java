@@ -2,6 +2,7 @@ package poker.version_graphics.model;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 
 public enum HandType {
     HighCard, OnePair, TwoPair, ThreeOfAKind, Straight, Flush, FullHouse, FourOfAKind, StraightFlush;
@@ -158,5 +159,63 @@ public enum HandType {
         if(isStraight(cards) && isFlush(cards)) found = true;
     	
         return found;        
+    }
+    
+    public int compareTieBreaker(ArrayList<Card> inCardsOne, ArrayList<Card> inCardsTwo) {
+    	// Since the compareTo method on Enums is final, we do the tie break comparison here. another solution would be writing a 
+    	// custom Comparator<HandType>
+    	Collections.sort(inCardsOne, new Comparator<Card>() {
+    		@Override
+    		public int compare(Card inCard1, Card inCard2) {
+    			return inCard2.getRank().ordinal() - inCard1.getRank().ordinal();
+    		}
+    	}); 
+    	int tmpHighestCardOne = inCardsOne.get(0).getRank().ordinal();
+    	
+    	Collections.sort(inCardsTwo, new Comparator<Card>() {
+    		@Override
+    		public int compare(Card inCard1, Card inCard2) {
+    			return inCard2.getRank().ordinal() - inCard1.getRank().ordinal();
+    		}
+    	}); 
+    	int tmpHighestCardTwo = inCardsTwo.get(0).getRank().ordinal();
+    	
+    	// Source for tie-breaks: https://www.adda52.com/poker/poker-rules/cash-game-rules/tie-breaker-rules
+    	switch(this) {
+    			// Highest Triplet wins
+    		case FullHouse:
+    			// in this case, the triplet is lower than the pair. setting the highest card to the triplet for evaluation
+    			if(tmpHighestCardOne != inCardsOne.get(2).getRank().ordinal()) {
+    				tmpHighestCardOne = inCardsOne.get(2).getRank().ordinal();
+    			}
+    			if(tmpHighestCardTwo != inCardsTwo.get(2).getRank().ordinal()) {
+    				tmpHighestCardTwo = inCardsTwo.get(2).getRank().ordinal();
+    			}
+				//Only one possible tie break -> both have the same high card
+        	case StraightFlush:
+    			// No tie break possible -> greater value wins
+    		case FourOfAKind:
+    			return tmpHighestCardOne - tmpHighestCardTwo;
+    			// Compare the highest cards until not the same. all five cards same value -> tie break
+    		case HighCard:
+    		case Flush:
+    			for(int i = 0; i < inCardsOne.size(); i++) {
+    				if(inCardsOne.get(i).getRank().ordinal() != inCardsTwo.get(i).getRank().ordinal()) {
+    					return inCardsOne.get(i).getRank().ordinal() - inCardsTwo.get(i).getRank().ordinal();
+    				}
+    			}
+    			return 0;
+    		case OnePair:
+        		return 0;
+        	case TwoPair:
+        	    return 0;
+        	case ThreeOfAKind:
+        	    return 0;
+        	    // the highest ending card wins
+        	case Straight:
+        	    return inCardsOne.get(4).getRank().ordinal() - inCardsTwo.get(4).getRank().ordinal();       	    	    	    			
+    		
+    	}
+    	return 0;
     }
 }

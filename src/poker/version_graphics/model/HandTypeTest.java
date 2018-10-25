@@ -118,5 +118,81 @@ class HandTypeTest {
 		
 		assertEquals(HandType.evaluateHand(tmpCards), HandType.HighCard);
 	}
+	
+	@Test
+	void TestTieBreakStraight() {
+		ArrayList<Card> tmpCards = new ArrayList<Card>();
+		tmpCards.add(new Card(Suit.Clubs, Rank.Ace));
+		tmpCards.add(new Card(Suit.Diamonds, Rank.King));
+		tmpCards.add(new Card(Suit.Diamonds, Rank.Queen));
+		tmpCards.add(new Card(Suit.Spades, Rank.Jack));
+		tmpCards.add(new Card(Suit.Hearts, Rank.Ten));
+		
+		ArrayList<Card> tmpCards2 = new ArrayList<Card>();
+		tmpCards2.add(new Card(Suit.Clubs, Rank.Ace));
+		tmpCards2.add(new Card(Suit.Diamonds, Rank.King));
+		tmpCards2.add(new Card(Suit.Diamonds, Rank.Queen));
+		tmpCards2.add(new Card(Suit.Spades, Rank.Jack));
+		tmpCards2.add(new Card(Suit.Hearts, Rank.Ten));
+		
+		assertEquals(HandType.StraightFlush.compareTieBreaker(tmpCards, tmpCards2), 0);
+	}
+	
+	@Test
+	void TestTieBreakStraightWinnerOne() {
+		ArrayList<Card> tmpCards = new ArrayList<Card>();
+		tmpCards.add(new Card(Suit.Clubs, Rank.Ace));
+		tmpCards.add(new Card(Suit.Diamonds, Rank.King));
+		tmpCards.add(new Card(Suit.Diamonds, Rank.Queen));
+		tmpCards.add(new Card(Suit.Spades, Rank.Jack));
+		tmpCards.add(new Card(Suit.Hearts, Rank.Ten));
+		
+		ArrayList<Card> tmpCards2 = new ArrayList<Card>();
+		tmpCards2.add(new Card(Suit.Clubs, Rank.Queen));
+		tmpCards2.add(new Card(Suit.Diamonds, Rank.Jack));
+		tmpCards2.add(new Card(Suit.Diamonds, Rank.Ten));
+		tmpCards2.add(new Card(Suit.Spades, Rank.Nine));
+		tmpCards2.add(new Card(Suit.Hearts, Rank.Eight));		
+		
+		assertTrue(HandType.StraightFlush.compareTieBreaker(tmpCards, tmpCards2)> 0);
+	}
+	
+	@Test
+	void TestTieBreakFullHouse() {
+		ArrayList<Card> tmpCards = new ArrayList<Card>();
+		tmpCards.add(new Card(Suit.Clubs, Rank.Ten));
+		tmpCards.add(new Card(Suit.Diamonds, Rank.Ten));
+		tmpCards.add(new Card(Suit.Hearts, Rank.Ten));
+		tmpCards.add(new Card(Suit.Clubs, Rank.Jack));
+		tmpCards.add(new Card(Suit.Diamonds, Rank.Jack));
+		
+		ArrayList<Card> tmpCards2 = new ArrayList<Card>();
+		tmpCards2.add(new Card(Suit.Clubs, Rank.Queen));
+		tmpCards2.add(new Card(Suit.Diamonds, Rank.Queen));
+		tmpCards2.add(new Card(Suit.Hearts, Rank.Queen));
+		tmpCards2.add(new Card(Suit.Spades, Rank.Nine));
+		tmpCards2.add(new Card(Suit.Hearts, Rank.Nine));		
+		
+		assertTrue(HandType.FullHouse.compareTieBreaker(tmpCards, tmpCards2)<0);
+	}
+	
+	@Test
+	void TestTieBreakFullHouseTwo() {
+		ArrayList<Card> tmpCards = new ArrayList<Card>();
+		tmpCards.add(new Card(Suit.Clubs, Rank.Ace));
+		tmpCards.add(new Card(Suit.Diamonds, Rank.Ace));
+		tmpCards.add(new Card(Suit.Hearts, Rank.Ace));
+		tmpCards.add(new Card(Suit.Clubs, Rank.Jack));
+		tmpCards.add(new Card(Suit.Diamonds, Rank.Jack));
+		
+		ArrayList<Card> tmpCards2 = new ArrayList<Card>();
+		tmpCards2.add(new Card(Suit.Clubs, Rank.Queen));
+		tmpCards2.add(new Card(Suit.Diamonds, Rank.Queen));
+		tmpCards2.add(new Card(Suit.Hearts, Rank.Queen));
+		tmpCards2.add(new Card(Suit.Spades, Rank.Nine));
+		tmpCards2.add(new Card(Suit.Hearts, Rank.Nine));		
+		
+		assertTrue(HandType.FullHouse.compareTieBreaker(tmpCards, tmpCards2)>0);
+	}
 
 }

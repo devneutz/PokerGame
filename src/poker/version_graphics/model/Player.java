@@ -75,6 +75,10 @@ public class Player implements Comparable<Player> {
      */
     @Override
     public int compareTo(Player o) {
-        return handType.compareTo(o.handType);
+    	int tmpCompare = handType.compareTo(o.handType);
+    	if(tmpCompare != 0) {
+    		return tmpCompare;	
+    	}
+    	return handType.compareTieBreaker(this.cards, o.cards);    	
     }
 }
