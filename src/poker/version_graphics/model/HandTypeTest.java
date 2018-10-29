@@ -194,5 +194,62 @@ class HandTypeTest {
 		
 		assertTrue(HandType.FullHouse.compareTieBreaker(tmpCards, tmpCards2)>0);
 	}
+	
+	@Test
+	void TestTieBreakOnePairWin() {
+		ArrayList<Card> tmpCards = new ArrayList<Card>();
+		tmpCards.add(new Card(Suit.Clubs, Rank.Ace));
+		tmpCards.add(new Card(Suit.Diamonds, Rank.Ace));
+		tmpCards.add(new Card(Suit.Hearts, Rank.Ten));
+		tmpCards.add(new Card(Suit.Clubs, Rank.Jack));
+		tmpCards.add(new Card(Suit.Diamonds, Rank.Four));
+		
+		ArrayList<Card> tmpCards2 = new ArrayList<Card>();
+		tmpCards2.add(new Card(Suit.Clubs, Rank.Queen));
+		tmpCards2.add(new Card(Suit.Diamonds, Rank.Queen));
+		tmpCards2.add(new Card(Suit.Hearts, Rank.Jack));
+		tmpCards2.add(new Card(Suit.Spades, Rank.Ten));
+		tmpCards2.add(new Card(Suit.Hearts, Rank.Three));		
+		
+		assertTrue(HandType.OnePair.compareTieBreaker(tmpCards, tmpCards2)>0);
+	}
+	
+	@Test
+	void TestTieBreakOnePairLoose() {
+		ArrayList<Card> tmpCards = new ArrayList<Card>();
+		tmpCards.add(new Card(Suit.Clubs, Rank.Ace));
+		tmpCards.add(new Card(Suit.Diamonds, Rank.Ace));
+		tmpCards.add(new Card(Suit.Hearts, Rank.Ten));
+		tmpCards.add(new Card(Suit.Clubs, Rank.Jack));
+		tmpCards.add(new Card(Suit.Diamonds, Rank.Four));
+		
+		ArrayList<Card> tmpCards2 = new ArrayList<Card>();
+		tmpCards2.add(new Card(Suit.Clubs, Rank.Ace));
+		tmpCards2.add(new Card(Suit.Diamonds, Rank.Ace));
+		tmpCards2.add(new Card(Suit.Hearts, Rank.Jack));
+		tmpCards2.add(new Card(Suit.Spades, Rank.Ten));
+		tmpCards2.add(new Card(Suit.Hearts, Rank.Five));		
+		
+		assertTrue(HandType.OnePair.compareTieBreaker(tmpCards, tmpCards2)<0);
+	}
+	
+	@Test
+	void TestTieBreakOnePairEven() {
+		ArrayList<Card> tmpCards = new ArrayList<Card>();
+		tmpCards.add(new Card(Suit.Clubs, Rank.Ace));
+		tmpCards.add(new Card(Suit.Diamonds, Rank.Ace));
+		tmpCards.add(new Card(Suit.Hearts, Rank.Seven));
+		tmpCards.add(new Card(Suit.Clubs, Rank.Nine));
+		tmpCards.add(new Card(Suit.Diamonds, Rank.Three));
+		
+		ArrayList<Card> tmpCards2 = new ArrayList<Card>();
+		tmpCards2.add(new Card(Suit.Clubs, Rank.Ace));
+		tmpCards2.add(new Card(Suit.Diamonds, Rank.Ace));
+		tmpCards2.add(new Card(Suit.Hearts, Rank.Seven));
+		tmpCards2.add(new Card(Suit.Spades, Rank.Nine));
+		tmpCards2.add(new Card(Suit.Hearts, Rank.Three));		
+		
+		assertTrue(HandType.OnePair.compareTieBreaker(tmpCards, tmpCards2)==0);
+	}
 
 }

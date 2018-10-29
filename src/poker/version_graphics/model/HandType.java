@@ -206,16 +206,76 @@ public enum HandType {
     			}
     			return 0;
     		case OnePair:
-        		return 0;
+    			int tmpPairValueOne = getPairValue(inCardsOne);
+    			int tmpPairValueTwo = getPairValue(inCardsTwo);
+
+    			int tmpCompareValueOne = tmpPairValueOne;
+    			int tmpCompareValueTwo = tmpPairValueTwo;
+    			if(tmpCompareValueOne == tmpCompareValueTwo) {
+    				// Use kicker
+    				int tmpKickerOne = 0;
+    				int tmpKickerTwo = 0;
+    				for(int i = 1; i < 4; i++) {
+    					tmpKickerOne = getCardValue(inCardsOne, i, tmpPairValueOne);
+    					tmpKickerTwo = getCardValue(inCardsTwo, i, tmpPairValueTwo);
+    					if(tmpKickerOne != tmpKickerTwo) {
+    						return tmpKickerOne - tmpKickerTwo;
+    					}
+    				}
+    				return 0;
+    			}
+    			return tmpCompareValueOne - tmpCompareValueTwo;    			
         	case TwoPair:
         	    return 0;
         	case ThreeOfAKind:
-        	    return 0;
+        		// Third card is always one of the three
+        		int tmpThreeOfAKindValueOne = inCardsOne.get(2).getRank().ordinal();
+        		int tmpThreeOfAKindValueTwo = inCardsTwo.get(2).getRank().ordinal();        		
+        		
+        		// in this type of poker, there is no possibility in two players having the same ThreeOfAKind
+        	    return tmpThreeOfAKindValueOne - tmpThreeOfAKindValueTwo;
         	    // the highest ending card wins
         	case Straight:
         	    return inCardsOne.get(4).getRank().ordinal() - inCardsTwo.get(4).getRank().ordinal();       	    	    	    			
     		
     	}
+    	return 0;
+    }
+    
+    // inLevel => 1 = highest card, 2 = second highest and so on
+    // inVetoOrdinal => which number can't be the highest
+    private static int getCardValue(ArrayList<Card> inCards, int inLevel, int inVetoOrdinal) {
+    	if(inLevel == 0) {
+    		return 0;
+    	}
+    	
+    	ArrayList<Card> tmpClonedCards = (ArrayList<Card>)inCards.clone();
+    	
+    	tmpClonedCards.removeIf(c -> c.getRank().ordinal() == inVetoOrdinal);
+    	
+    	Collections.sort(tmpClonedCards, new Comparator<Card>() {
+    		@Override
+    		public int compare(Card inCard1, Card inCard2) {
+    			return inCard2.getRank().ordinal() - inCard1.getRank().ordinal();
+    		}
+    	});
+    	
+    	return tmpClonedCards.get(inLevel - 1).getRank().ordinal();
+    }
+    
+    
+    private static int getPairValue(ArrayList<Card> inCards) {
+    	if(!isOnePair(inCards)) {
+    		return 0;
+    	}
+    	
+    	for (int i = 0; i < inCards.size() - 1 ; i++) {
+            for (int j = i+1; j < inCards.size() ; j++) {
+                if (inCards.get(i).getRank() == inCards.get(j).getRank()) {
+                	return inCards.get(i).getRank().ordinal();
+                }
+            }
+        }
     	return 0;
     }
 }

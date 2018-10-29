@@ -1,5 +1,6 @@
 package poker.version_graphics.controller;
 
+import java.util.ArrayList;
 import java.util.Optional;
 
 import javafx.beans.value.ChangeListener;
@@ -106,17 +107,26 @@ public class PokerGameController {
     	model.getDeck().shuffle();
     }
     
-    private void evaluateWinner() {
-    	Player winner = model.getPlayer(0);
+    protected void evaluateWinner() {
+    	ArrayList<Player> winners = new ArrayList<Player>();
+    	winners.add(model.getPlayer(0));
     	
     	for(int i = 0; i < model.getNumberOfPlayers(); i++) {
     		Player playerCompareTo = model.getPlayer(i);
     		playerCompareTo.setIsWinner(false);
-    		if(playerCompareTo.compareTo(winner) > 0) {
-    			winner = playerCompareTo;
+    		if(playerCompareTo.compareTo(winners.get(0)) > 0) {
+    			winners.clear();
+    			winners.add(playerCompareTo);
+    		}
+    		
+    		if(playerCompareTo.compareTo(winners.get(0))  == 0){
+    			winners.add(playerCompareTo);
     		}
     	}
-    	winner.setIsWinner(true);	
+    	
+    	for(Player w : winners) {
+        	w.setIsWinner(true);	
+    	}
     }
     
     /**
