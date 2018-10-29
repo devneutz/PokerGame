@@ -161,7 +161,7 @@ public enum HandType {
         return found;        
     }
     
-    public int compareTieBreaker(ArrayList<Card> inCardsOne, ArrayList<Card> inCardsTwo) {
+    protected int compareTieBreaker(ArrayList<Card> inCardsOne, ArrayList<Card> inCardsTwo) {
     	// Since the compareTo method on Enums is final, we do the tie break comparison here. another solution would be writing a 
     	// custom Comparator<HandType>
     	Collections.sort(inCardsOne, new Comparator<Card>() {
